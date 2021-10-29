@@ -49,12 +49,32 @@
 							$Number=$_POST['Number'];  
 							$Address=$_POST['Address']; 
 							$Area=$_POST['Area'];
-							$ConstArea=$_POST['ConstructionArea'];  
-							$sql = "Insert Into Property (PropertyTypeId, OwnerId, Number, Address, Area, ConstructionArea) Values ('$PropTypeID','$OwnerId','$Number','$Address','$Area','$ConstArea')";
-							mysqli_query($conex,$sql) or die(mysql_error());
-							echo "<hr>";
-							echo "<center>","<h2>", "Correct Registration.","</h2>","</center>";
-							echo "<hr>";	
+							$ConstArea=$_POST['ConstructionArea'];
+							if($resultadoP = $conex->query("select * from PropertyType")){
+								if($resultadoP->num_rows > 0){
+									while ( $filaid = $resultadoP->fetch_assoc() ) {
+										$IdP= $filaid["Id"];
+									}
+								}
+							}    
+							if($resultadoO = $conex->query("select * from Owner")){
+								if($resultadoO->num_rows > 0){
+									while ( $filaid = $resultadoO->fetch_assoc() ) {
+										$IdO= $filaid["Id"];
+									}
+								}
+							} 
+							if($PropTypeID == $IdP && $OwnerId == $IdO) {
+								$sql = "Insert Into Property (PropertyTypeId, OwnerId, Number, Address, Area, ConstructionArea) Values ('$PropTypeID','$OwnerId','$Number','$Address','$Area','$ConstArea')";
+								mysqli_query($conex,$sql) or die(mysql_error());
+								echo "<hr>";
+								echo "<center>","<h2>", "Correct Registration.","</h2>","</center>";
+								echo "<hr>";
+							}
+							else{
+								echo "<center>","<h2>", "Property Id or Owner Id incorrect.","</h2>","</center>";
+							}
+
 						}	
 					?>
 				</form>
